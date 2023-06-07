@@ -16,7 +16,7 @@ class Program
     static int CalculatePrio(string line)
     {
         var items = line.ToCharArray();
-        var compartmentSize = items.Length;
+        var compartmentSize = items.Length / 2;
 
 
 
