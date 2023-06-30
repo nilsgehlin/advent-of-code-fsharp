@@ -16,6 +16,8 @@
     <Compile Include="2022\Day3\Solution.fs" />
 
     <Compile Include="2022\Day4\Solution.fs" />
+
+    <Compile Include="2022\Day5\Solution.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AdventOfCode.Common\AdventOfCode.Common.fsproj" />

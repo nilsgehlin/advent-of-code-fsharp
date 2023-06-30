@@ -72,21 +72,20 @@ module Solver =
         | Unknown -> "?"
 
     let evaluateResult produced correct =
-        match (produced = correct) with
+        match ($"{produced}" = correct) with
         | true -> getResultFlag Success
-        | false -> sprintf "%s (should be %i)" (getResultFlag Failure) correct
+        | false -> sprintf "%s (should be %A)" (getResultFlag Failure) correct
 
-    let readResult partNo file =
-        file |> File.ReadAllText |> Helpers.splitLines |> Array.map int
+    let readResult file =
+        file |> File.ReadAllText |> Helpers.splitLines
 
     let printResult solutionInfo =
         let result = solutionInfo.Method.Invoke(null, [|solutionInfo.InputFile |> File.ReadAllText|])
-        let result = downcast result : int
         let resultFlag = 
             match solutionInfo.OutputFile with
             | None -> getResultFlag Unknown
             | Some outfile -> 
-                let correctValues = (readResult solutionInfo.Part outfile)
+                let correctValues = (readResult outfile)
                 match Array.tryItem (solutionInfo.Part - 1) correctValues with
                 | Some correct -> evaluateResult result correct 
                 | None -> getResultFlag Unknown

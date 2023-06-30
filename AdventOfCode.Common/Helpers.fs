@@ -16,3 +16,13 @@ module Helpers =
 
     let splitLines input =
         splitString Environment.NewLine input
+
+    let joinString (delim: string) (arr: string array) = String.Join(delim, arr)
+
+    let trimWhitespace (str: string) =
+        str.Trim()
+
+    let takeArrayAt start incr arr =
+        let sq = seq { for i in start..incr .. (Array.length arr) -> arr[i] }
+        Seq.toArray sq
+
