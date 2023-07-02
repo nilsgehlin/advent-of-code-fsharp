@@ -21,6 +21,7 @@ module Solver =
         Part: int
         Method: MethodInfo
         InputFile: string
+        ExampleFile: string
         OutputFile: string Option
     }
 
@@ -49,6 +50,7 @@ module Solver =
             Part = attr.Part
             Method = mi
             InputFile = $"{dataBasePath}.in"
+            ExampleFile= $"{dataBasePath}.example"
             OutputFile = outputFileOpt
         }
 
@@ -79,16 +81,24 @@ module Solver =
     let readResult file =
         file |> File.ReadAllText |> Helpers.splitLines
 
-    let printResult solutionInfo =
-        let result = solutionInfo.Method.Invoke(null, [|solutionInfo.InputFile |> File.ReadAllText|])
+    let printResult runExample solutionInfo =
+        let inputFile =
+            match runExample with
+            | true -> solutionInfo.ExampleFile
+            | false -> solutionInfo.InputFile
+
+        let result = solutionInfo.Method.Invoke(null, [|inputFile |> File.ReadAllText|])
         let resultFlag = 
-            match solutionInfo.OutputFile with
-            | None -> getResultFlag Unknown
-            | Some outfile -> 
-                let correctValues = (readResult outfile)
-                match Array.tryItem (solutionInfo.Part - 1) correctValues with
-                | Some correct -> evaluateResult result correct 
+            match runExample with
+            | true -> ""
+            | false ->
+                match solutionInfo.OutputFile with
                 | None -> getResultFlag Unknown
+                | Some outfile -> 
+                    let correctValues = (readResult outfile)
+                    match Array.tryItem (solutionInfo.Part - 1) correctValues with
+                    | Some correct -> evaluateResult result correct 
+                    | None -> getResultFlag Unknown
         
         printfn $"{solutionInfo.Year}: Day {solutionInfo.Day} Part {solutionInfo.Part} -> {result} {resultFlag}"
 
@@ -97,7 +107,7 @@ module Solver =
         | Some value -> ref = value
         | None -> true
 
-    let runSolutions year day part =
+    let runSolutions year day part runExample =
         let solutionsInAssembly =
             let types = Assembly.GetAssembly(typeof<DummyType>).GetTypes()
             types
@@ -110,4 +120,4 @@ module Solver =
             |> Array.sortBy (fun solInfo -> solInfo.Year, solInfo.Day, solInfo.Part)
 
         solutionsInAssembly
-        |> Array.iter (fun solInfo -> printResult solInfo)
+        |> Array.iter (fun solInfo -> printResult runExample solInfo)
