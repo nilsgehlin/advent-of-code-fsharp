@@ -25,10 +25,6 @@ module Solver =
         OutputFile: string Option
     }
 
-    type Color =
-        | Green
-        | Red
-
     type ResultType =
         | Success
         | Failure
@@ -59,18 +55,10 @@ module Solver =
         |> Seq.tryFind (fun attr -> attr.AttributeType = typeof<SolutionAttribute>)
         |> Option.map (fun _ -> mi)
 
-    let colorize color str =
-        let esc = string (char 0x1B)
-        let colorCode =
-            match color with
-            | Green -> "32"
-            | Red -> "31"
-        esc + "[" + colorCode + ";1m" + str + esc + "[0m"
-
     let getResultFlag resultType =
         match resultType with
-        | Success -> colorize Green "+"
-        | Failure -> colorize Red "-"
+        | Success -> Helpers.colorize Helpers.Green "+"
+        | Failure -> Helpers.colorize Helpers.Red "-"
         | Unknown -> "?"
 
     let evaluateResult produced correct =

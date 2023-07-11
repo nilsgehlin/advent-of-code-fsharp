@@ -10,6 +10,19 @@ type SolutionAttribute(year: int, day: int, part: int) =
     member val Part: int = part with get
 
 module Helpers =
+
+    type Color =
+        | Green
+        | Red
+    let colorize color str =
+        let esc = string (char 0x1B)
+        let colorCode =
+            match color with
+            | Green -> "32"
+            | Red -> "31"
+        esc + "[" + colorCode + ";1m" + str + esc + "[0m"
+
+
     let splitString delimiter (str: string) =
         let regex = new Regex(delimiter)
         regex.Split(str)
