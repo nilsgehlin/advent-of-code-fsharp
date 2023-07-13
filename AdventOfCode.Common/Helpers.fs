@@ -39,3 +39,6 @@ module Helpers =
         let sq = seq { for i in start..incr .. (Array.length arr) -> arr[i] }
         Seq.toArray sq
 
+    let charListToString charLst = charLst |> List.map (fun c -> string c) |> String.concat "" 
+    let charListToInt charLst =  charLst |> charListToString |> int
+

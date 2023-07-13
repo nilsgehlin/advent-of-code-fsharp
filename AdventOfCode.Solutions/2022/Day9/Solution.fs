@@ -58,7 +58,7 @@ module Solution =
     let parseCommand line =
         match line |> Seq.toList with
         | dir :: ' ' :: length ->
-            let l = length |> List.map (fun c -> string c) |> String.concat "" |> int
+            let l = Helpers.charListToInt length
             match dir with
             | 'U' -> {Direction = Up; Length = l}
             | 'D' -> {Direction = Down; Length = l}
