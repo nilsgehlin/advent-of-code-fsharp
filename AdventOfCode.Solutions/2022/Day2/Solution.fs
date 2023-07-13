@@ -2,7 +2,85 @@ namespace AdventOfCode.Solutions.Day2
 
 open System
 open AdventOfCode.Common
-open DomainTypes
+
+module DomainTypes =
+    type Action =
+        | Rock
+        | Paper
+        | Scissor
+
+    type Outcome =
+        | ElfWin
+        | Draw
+        | PlayerWin
+
+module Action =
+    open DomainTypes
+    let create symbol =
+        match symbol with
+        | 'A'
+        | 'X' -> Rock
+
+        | 'B'
+        | 'Y' -> Paper
+
+        | 'C'
+        | 'Z' -> Scissor
+
+        | _ -> raise (Exception("Exited due to invalid action symbol"))
+    let whatBeats action =
+        match action with
+        | Rock -> Paper
+        | Paper -> Scissor
+        | Scissor -> Rock
+
+    let whatIsBeatedBy action =
+        match action with
+        | Rock -> Scissor
+        | Paper -> Rock
+        | Scissor -> Paper
+
+    let toScore action =
+        match action with
+        | Rock -> 1
+        | Paper -> 2
+        | Scissor -> 3
+
+    let getActionScore action =
+        match action with
+        | Rock -> 1
+        | Paper -> 2
+        | Scissor -> 3
+
+module Outcome = 
+    open DomainTypes
+    open Action
+    let create symbol =
+        match symbol with
+        | 'X' -> ElfWin
+        | 'Y' -> Draw
+        | 'Z' -> PlayerWin
+        | _ -> raise (Exception("Exited due to invalid outcome symbol"))
+    
+    let createFromActions actions =
+        match actions with
+        | (opponent, player) when opponent = player -> Draw
+        | (opponent, player) when player = whatBeats (opponent) -> PlayerWin
+        | _ -> ElfWin
+
+    let toScore outcome =
+        match outcome with
+        | ElfWin -> 0
+        | Draw -> 3
+        | PlayerWin -> 6
+
+    let getPlayerAction elfAction desiredOutcome =
+        let playerAction =
+            match desiredOutcome with
+            | ElfWin -> whatIsBeatedBy elfAction
+            | Draw -> elfAction
+            | PlayerWin -> whatBeats elfAction
+        playerAction
 
 module Solution =
     let passAlong f input =

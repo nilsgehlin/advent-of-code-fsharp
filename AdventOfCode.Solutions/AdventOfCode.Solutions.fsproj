@@ -6,9 +6,7 @@
   <ItemGroup>
     <Compile Include="Solver.fs" />
     <Compile Include="2022\Day1\Solution.fs" />
-    <Compile Include="2022\Day2\DomainTypes.fs" />
-    <Compile Include="2022\Day2\Action.fs" />
-    <Compile Include="2022\Day2\Outcome.fs" />
+    <Compile Include="2022\Day2\Solution.fs" />
     <Compile Include="2022\Day3\Solution.fs" />
     <Compile Include="2022\Day4\Solution.fs" />
     <Compile Include="2022\Day5\Solution.fs" />
